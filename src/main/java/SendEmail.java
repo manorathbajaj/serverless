@@ -53,6 +53,7 @@ public class SendEmail implements RequestHandler<SNSEvent,Object> {
                     .withRegion(Regions.US_EAST_1).build();
 
             client.sendEmail(emailRequest);
+            logger.log("email sent.");
         }
         return null;
     }
