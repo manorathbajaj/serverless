@@ -21,6 +21,7 @@ public class SendEmail implements RequestHandler<SNSEvent,Object> {
 
     @Override
     public Object handleRequest(SNSEvent input, Context context) {
+        domain = domain.substring(0,domain.length() -2);
         LambdaLogger logger = context.getLogger();
 
         logger.log("in lambda");
