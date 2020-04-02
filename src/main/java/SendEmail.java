@@ -21,11 +21,12 @@ public class SendEmail implements RequestHandler<SNSEvent,Object> {
 
     @Override
     public Object handleRequest(SNSEvent input, Context context) {
-        domain = domain.substring(0,domain.length() -2);
+        domain = domain.substring(0,domain.length()-1);
+
         LambdaLogger logger = context.getLogger();
 
         logger.log("in lambda");
-
+        logger.log("domain"+domain);
         String message = input.getRecords().get(0).getSNS().getMessage();
         logger.log("message: " + message);
 
@@ -48,7 +49,7 @@ public class SendEmail implements RequestHandler<SNSEvent,Object> {
             Message messages = new Message().withSubject(subject).withBody(body);
 
             SendEmailRequest emailRequest = new SendEmailRequest()
-                    .withDestination(new Destination().withToAddresses(parts[0])).withMessage(messages).withSource("email-service@"+domain);
+                    .withDestination(new Destination().withToAddresses(parts[0])).withMessage(messages).withSource("email@"+domain);
 
             AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
                     .withRegion(Regions.US_EAST_1).build();
