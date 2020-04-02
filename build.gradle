@@ -16,6 +16,13 @@ dependencies {
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.0'
     implementation 'com.amazonaws:aws-lambda-java-events:2.2.7'
     runtimeOnly 'com.amazonaws:aws-lambda-java-log4j2:1.1.0'
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.228')
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-dynamodb
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.9.0'
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-ses
+    compile group: 'com.amazonaws', name: 'aws-java-sdk-ses', version: '1.11.756'
+
+
 }
 
 task buildZip(type: Zip) {
