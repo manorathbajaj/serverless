@@ -39,7 +39,6 @@ build:
           aws configure set aws_access_key_id ${AWS_ACCESS_KEY}
           aws configure set aws_secret_access_key ${AWS_SECRET_KEY}
           aws s3 cp serverless-1.0-SNAPSHOT.zip s3://${CODE_DEPLOY_S3_BUCKET}
-
     - run:
         name: Make lambda API call
         command: |
@@ -49,8 +48,8 @@ workflows:
   version: 2
   build_deploy-workflow:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
+    - build:
+        filters:
+          branches:
+            only:
+              - master
