@@ -40,7 +40,9 @@ jobs:
             echo "Uploading Artifact to S3 bucket ${CODE_DEPLOY_S3_BUCKET}"
             cd build/distributions/
             aws configure set aws_access_key_id ${AWS_ACCESS_KEY}
+            echo "here1"
             aws configure set aws_secret_access_key ${AWS_SECRET_KEY}
+            echo "here2"
             aws s3 cp serverless-1.0-SNAPSHOT.zip s3://${CODE_DEPLOY_S3_BUCKET}
       - run:
           name: Make lambda API call
