@@ -33,7 +33,7 @@ public class SendEmail implements RequestHandler<SNSEvent,Object> {
         dynamoDBClient.setRegion(Region.getRegion(Regions.US_EAST_1));
         this.dynamoDb = new com.amazonaws.services.dynamodbv2.document.DynamoDB(dynamoDBClient);
         Item item = this.dynamoDb.getTable("csye6225").getItem("id",parts[0]);
-        if(item == null || (item != null && Long.parseLong(item.get("TTL").toString()) < Instant.now().getEpochSecond())) {
+        if(item == null || (item != null && Long.parseLong(item.get("TTL").toString()) > Instant.now().getEpochSecond())) {
             this.dynamoDb.getTable("csye6225").putItem(new PutItemSpec()
                     .withItem(new Item().withString("id", parts[0]).withLong("TTL", (60*60) + Instant.now().getEpochSecond())));
 
