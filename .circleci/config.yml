@@ -1,0 +1,56 @@
+build:
+  docker:
+    - image: circleci/openjdk:11.0.5-jdk-stretch
+    - image: circleci/mariadb:10.3.21-bionic-ram
+      environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: csye6225
+  steps:
+    - checkout
+    - run:
+        name: Waiting for MySQL to be ready
+        command: |
+          for i in `seq 1 10`;
+          do
+            nc -z 127.0.0.1 3306 && echo Success && exit 0
+            echo -n .
+            sleep 1
+          done
+          echo Failed waiting for MySQL && exit 1
+    - run:
+        name: Install packages
+        command: |
+          sudo apt-get update && sudo apt-get install wget zip unzip python-pip python-dev build-essential -y
+          python --version
+    - run:
+        name: Install awscli
+        command: sudo pip install awscli
+    - run:
+        name: Build Artifact
+        command: |
+          ls -al
+          ./gradlew clean
+          ./gradlew buildZip
+    - run:
+        name: Upload Artifact to S3
+        command: |
+          echo "Uploading Artifact to S3 bucket ${CODE_DEPLOY_S3_BUCKET}"
+          cd build/distributions/
+          aws configure set aws_access_key_id ${AWS_ACCESS_KEY}
+          aws configure set aws_secret_access_key ${AWS_SECRET_KEY}
+          aws s3 cp serverless-1.0-SNAPSHOT.zip s3://${CODE_DEPLOY_S3_BUCKET}
+
+    - run:
+        name: Make lambda API call
+        command: |
+          aws lambda update-function-code --function-name MyLambdaFunction --region us-east-1 \
+                      --zip-file fileb://./serverless-1.0-SNAPSHOT.zip
+workflows:
+  version: 2
+  build_deploy-workflow:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
