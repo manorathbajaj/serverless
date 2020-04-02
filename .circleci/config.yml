@@ -20,7 +20,7 @@ jobs:
              sleep 1
             done
             echo Failed waiting for MySQL && exit 1
-     - run:
+      - run:
           name: Install packages
           command: |
             sudo apt-get update && sudo apt-get install wget zip unzip python-pip python-dev build-essential -y
