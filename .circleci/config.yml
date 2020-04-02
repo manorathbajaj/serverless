@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Make lambda API call
           command: |
-            aws lambda update-function-code --function-name SendEmailOnSNS --region us-east-1 --zip-file fileb://serverless-1.0-SNAPSHOT.zip
+            aws lambda update-function-code --function-name SendEmailOnSNS --region us-east-1 --zip-file fileb://build/distributions/serverless-1.0-SNAPSHOT.zip
 workflows:
   version: 2
   build_deploy-workflow:
